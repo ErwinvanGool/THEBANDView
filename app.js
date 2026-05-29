@@ -70,7 +70,7 @@ async function loadVideos() {
   allVideos = data.videos
     .map(v => ({ ...v, videoId: extractVideoId(v.youtubeUrl) }))
     .filter(v => v.videoId)                           // skip entries without a valid URL
-    .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
+    .sort((a, b) => parseDate(b.date) - parseDate(a.date)); // newest first
 
   buildCategoryNav();
   applyFilter('all');
@@ -345,6 +345,16 @@ function updateModalMeta() {
 /* ============================================================
    Utility helpers
    ============================================================ */
+
+/**
+ * Parse a date string safely. Returns epoch (Jan 1 1970) for empty or
+ * invalid dates so those videos sort to the bottom of the "newest" list.
+ */
+function parseDate(dateStr) {
+  if (!dateStr) return new Date(0);
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? new Date(0) : d;
+}
 
 /** Safely escape HTML special characters to prevent XSS. */
 function escapeHtml(str) {
