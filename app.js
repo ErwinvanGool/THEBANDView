@@ -187,6 +187,7 @@ function createVideoCard(video, indexInFiltered) {
         src="${thumbUrl}"
         alt="${escapeHtml(video.title)}"
         loading="lazy"
+        onload="if(this.naturalWidth===120){this.src='${thumbFallback}'}"
         onerror="if(this.src!=='${thumbFallback}'){this.src='${thumbFallback}'}"
       />
       <div class="play-overlay" aria-hidden="true">&#9654;</div>
