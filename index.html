@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- iPad / iPhone home-screen web app -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="THEBANDView" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0a0a0a" />
+
+  <title>THEBANDView – Drumfanfare Exempel</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       HEADER  –  logo + random-play button
+  ══════════════════════════════════════════════════════════ -->
+  <header id="app-header">
+    <div class="header-inner">
+      <!-- Logo: falls back to text if image not found -->
+      <a href="#" id="logo-link" aria-label="THEBANDView home">
+        <img
+          src="assets/logo.png"
+          alt="Drumfanfare Exempel"
+          id="logo-img"
+          onerror="this.style.display='none'; document.getElementById('logo-text').style.display='flex';"
+        />
+        <span id="logo-text" style="display:none;">
+          <span class="logo-the">THE</span><span class="logo-band">BAND</span><span class="logo-view">View</span>
+        </span>
+      </a>
+
+      <button id="random-btn" class="btn-random" aria-label="Speel een willekeurige video">
+        <span class="btn-random-icon">&#9681;</span>
+        <span class="btn-random-label">Verras me!</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       CATEGORY NAV  –  filter chips
+  ══════════════════════════════════════════════════════════ -->
+  <nav id="category-nav" aria-label="Categorieën">
+    <!-- Chips are injected by app.js -->
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       NEWEST SECTION
+  ══════════════════════════════════════════════════════════ -->
+  <section id="newest-section" aria-label="Nieuwste videos">
+    <div class="section-header">
+      <h2 class="section-title">Nieuwste video&#8217;s</h2>
+    </div>
+    <div id="newest-grid" class="video-grid" role="list"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN VIDEO SECTION  –  all / filtered videos
+  ══════════════════════════════════════════════════════════ -->
+  <section id="videos-section" aria-label="Alle videos">
+    <div class="section-header">
+      <h2 class="section-title" id="videos-section-title">Alle video&#8217;s</h2>
+    </div>
+    <div id="main-grid" class="video-grid" role="list"></div>
+    <p id="no-videos-msg" class="no-videos hidden">Geen video&#8217;s gevonden in deze categorie.</p>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       VIDEO PLAYER MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div
+    id="modal"
+    class="modal hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Video speler"
+  >
+    <!-- Backdrop: tap to close -->
+    <div id="modal-backdrop" class="modal-backdrop"></div>
+
+    <!-- Panel -->
+    <div class="modal-panel">
+
+      <!-- Top bar: back button + title -->
+      <div class="modal-topbar">
+        <button id="close-btn" class="btn-close" aria-label="Terug naar overzicht">
+          &#8592; Terug
+        </button>
+        <span id="modal-title" class="modal-title-text"></span>
+        <span id="modal-counter" class="modal-counter"></span>
+      </div>
+
+      <!-- YouTube player (replaced by iframe by the YT API) -->
+      <div id="player-container">
+        <div id="youtube-player"></div>
+      </div>
+
+      <!-- Bottom controls: prev / next -->
+      <div class="modal-controls">
+        <button id="prev-btn" class="btn-nav" aria-label="Vorige video">
+          &#9664; Vorige
+        </button>
+        <button id="next-btn" class="btn-nav btn-nav-next" aria-label="Volgende video">
+          Volgende &#9654;
+        </button>
+      </div>
+
+    </div>
+  </div><!-- /#modal -->
+
+  <!-- app.js must load before the YouTube API so onYouTubeIframeAPIReady is defined in time -->
+  <script src="app.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+</body>
+</html>

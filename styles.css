@@ -1,0 +1,551 @@
+/* ============================================================
+   THEBANDView – styles.css
+   iPad Pro landscape optimised · black / white / red palette
+   ============================================================ */
+
+/* ── Design tokens ─────────────────────────────────────── */
+:root {
+  --bg:            #0a0a0a;
+  --surface:       #181818;
+  --surface-hover: #222222;
+  --border:        #2c2c2c;
+  --accent:        #e3000b;   /* Drumfanfare red */
+  --accent-hover:  #ff1e1e;
+  --text:          #ffffff;
+  --text-muted:    #888888;
+  --radius:        14px;
+  --gap:           22px;
+  --header-h:      72px;
+  --nav-h:         62px;
+  --max-w:         1440px;
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+#app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: rgba(10, 10, 10, 0.96);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 var(--gap);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+#logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  outline: none;
+}
+
+#logo-img {
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Fallback text logo */
+#logo-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.logo-the  { color: var(--text-muted); font-size: 0.65em; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; align-self: center; margin-right: 4px; }
+.logo-band { color: var(--text); }
+.logo-view { color: var(--accent); }
+
+/* Random button */
+.btn-random {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 0 28px;
+  height: 52px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-random:active {
+  background: var(--accent-hover);
+  transform: scale(0.95);
+}
+
+.btn-random-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* ── Category navigation ────────────────────────────────── */
+#category-nav {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--nav-h);
+  padding: 0 var(--gap);
+  background: rgba(10, 10, 10, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+#category-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.category-chip {
+  flex-shrink: 0;
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 0 24px;
+  height: 44px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.category-chip.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.category-chip:active {
+  transform: scale(0.94);
+}
+
+/* ── Section layout ─────────────────────────────────────── */
+#newest-section,
+#videos-section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 28px var(--gap) 0;
+}
+
+#videos-section {
+  padding-bottom: 60px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Red bar before title */
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 1.1em;
+  background: var(--accent);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.no-videos {
+  color: var(--text-muted);
+  font-size: 1rem;
+  padding: 24px 0;
+}
+
+/* ── Video grid ─────────────────────────────────────────── */
+.video-grid {
+  display: grid;
+  /* 4 columns on iPad Pro landscape, auto-fills smaller */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ── Video card ─────────────────────────────────────────── */
+.video-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* large touch target */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.video-card:active {
+  transform: scale(0.96);
+}
+
+/* Hover only for devices that support it (desktop / magic keyboard) */
+@media (hover: hover) {
+  .video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  .video-card:hover .play-overlay {
+    opacity: 1;
+  }
+
+  .video-card:hover .video-thumbnail {
+    transform: scale(1.05);
+  }
+}
+
+/* Thumbnail */
+.thumbnail-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  overflow: hidden;
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.28s ease;
+}
+
+/* Play overlay icon */
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.42);
+  font-size: 2.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  transition: opacity 0.18s;
+  pointer-events: none;
+}
+
+/* Always briefly show play icon when tapping on touch screens */
+@media (hover: none) {
+  .video-card:active .play-overlay {
+    opacity: 1;
+  }
+}
+
+/* Card info row */
+.video-info {
+  padding: 12px 14px 16px;
+}
+
+.video-category-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin-bottom: 7px;
+}
+
+.video-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  /* clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Modal / video player overlay ──────────────────────── */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Padding for notch/safe-area on iPhone landscape */
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+           env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+}
+
+/* Semi-transparent backdrop */
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.93);
+}
+
+/* Panel sits above backdrop */
+.modal-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1080px;
+  padding: 14px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Top bar */
+.modal-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-close {
+  flex-shrink: 0;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 0 24px;
+  height: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-close:active {
+  background: var(--surface-hover);
+  transform: scale(0.95);
+}
+
+.modal-title-text {
+  flex: 1;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.modal-counter {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 48px;
+  text-align: right;
+}
+
+/* YouTube player container */
+#player-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* The YT API replaces #youtube-player with an <iframe> */
+#youtube-player,
+#player-container iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Prev / Next controls */
+.modal-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn-nav {
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  padding: 0 36px;
+  height: 58px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  min-width: 150px;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.btn-nav:active {
+  background: var(--surface-hover);
+  transform: scale(0.95);
+}
+
+.btn-nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.btn-nav-next {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-nav-next:active {
+  background: var(--accent-hover);
+}
+
+/* ── Responsive breakpoints ─────────────────────────────── */
+
+/* Large desktop / iPad Pro landscape */
+@media (min-width: 1200px) {
+  .video-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tablet portrait */
+@media (min-width: 700px) and (max-width: 1199px) {
+  .video-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile: 2 columns */
+@media (max-width: 699px) {
+  :root {
+    --header-h: 60px;
+    --nav-h:    54px;
+    --gap:      14px;
+  }
+
+  .btn-random-label { display: none; }  /* icon only on small phones */
+
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* Newest row scrolls horizontally on small screens */
+  #newest-grid {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 10px;
+    padding-bottom: 4px;
+    /* prevent collapse */
+    grid-template-columns: unset;
+  }
+
+  #newest-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  #newest-grid .video-card {
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+
+  .modal-panel {
+    padding: 10px 12px 14px;
+    gap: 10px;
+  }
+
+  .btn-nav {
+    min-width: 110px;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 0.95rem;
+  }
+
+  .btn-close {
+    padding: 0 16px;
+    height: 44px;
+    font-size: 0.9rem;
+  }
+
+  .modal-title-text {
+    font-size: 0.9rem;
+  }
+}
