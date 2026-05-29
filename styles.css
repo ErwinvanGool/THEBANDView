@@ -260,6 +260,13 @@ button {
   gap: 16px;
 }
 
+/* Newest section: limit to a single row */
+#newest-grid {
+  grid-template-rows: auto;  /* 1 explicit row */
+  grid-auto-rows: 0;         /* collapse any overflow rows */
+  overflow: hidden;
+}
+
 /* ── Video card ─────────────────────────────────────────── */
 .video-card {
   background: var(--surface);
