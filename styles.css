@@ -597,25 +597,19 @@ button {
     gap: 10px;
   }
 
-  /* Newest row scrolls horizontally on small screens */
+  /* Newest section: toon 1 compacte kaart op mobiel */
   #newest-grid {
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 10px;
-    padding-bottom: 4px;
-    /* prevent collapse */
+    display: block;
     grid-template-columns: unset;
   }
 
-  #newest-grid::-webkit-scrollbar {
+  /* Alleen de eerste kaart tonen, de rest verbergen */
+  #newest-grid .video-card:not(:first-child) {
     display: none;
   }
 
-  #newest-grid .video-card {
-    min-width: 200px;
-    flex-shrink: 0;
+  #newest-grid .video-card:first-child {
+    width: 260px;
   }
 
   .modal-panel {
