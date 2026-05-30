@@ -21,8 +21,9 @@
 'use strict';
 
 /* ── Configuration ────────────────────────────────────── */
-const NEWEST_COUNT = 6;   // number of videos shown in the "Newest" row
-const DATA_URL     = 'data/videos.json';
+const NEWEST_COUNT  = 6;   // number of videos shown in the "Newest" row
+const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQw_z5XuGMTmRkr6B0G4m7PwSW5BfatlcWtZfKvJ1BQoKZ8UNB2FAq1sqgMAgjBPRUInOxagPw5PIbu/pub?output=csv';
+const FALLBACK_URL   = 'data/videos.json';
 
 /* ── App state ────────────────────────────────────────── */
 let allVideos      = [];  // every video from JSON (sorted newest first)
@@ -52,22 +53,69 @@ window.onYouTubeIframeAPIReady = function () {
 /* ============================================================
    Data loading
    ============================================================ */
+
+/**
+ * Parse a CSV string into an array of objects using the first row as headers.
+ */
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+  return lines.slice(1).map(line => {
+    // Handle quoted fields that may contain commas
+    const fields = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === '"') {
+        inQuotes = !inQuotes;
+      } else if (line[i] === ',' && !inQuotes) {
+        fields.push(current.trim());
+        current = '';
+      } else {
+        current += line[i];
+      }
+    }
+    fields.push(current.trim());
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = fields[i] || ''; });
+    return obj;
+  });
+}
+
 async function loadVideos() {
-  let data;
+  let videos = null;
+
+  // 1. Try Google Sheets CSV
   try {
-    const res = await fetch(DATA_URL);
+    const res = await fetch(SHEETS_CSV_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    data = await res.json();
+    const csv = await res.text();
+    const rows = parseCSV(csv);
+    // Expect columns: title, youtubeUrl, category, date
+    videos = rows.filter(r => r.youtubeUrl);
   } catch (err) {
-    console.error('Kon video data niet laden:', err);
-    document.getElementById('main-grid').innerHTML =
-      '<p style="color:#888;padding:20px 0">Kon video\'s niet laden.<br>' +
-      'Controleer of <code>data/videos.json</code> bestaat en correcte URLs bevat.</p>';
-    return;
+    console.warn('Google Sheets niet beschikbaar, terugvallen op lokale data:', err);
+  }
+
+  // 2. Fall back to videos.json
+  if (!videos) {
+    try {
+      const res = await fetch(FALLBACK_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      videos = data.videos;
+    } catch (err) {
+      console.error('Kon video data niet laden:', err);
+      document.getElementById('main-grid').innerHTML =
+        '<p style="color:#888;padding:20px 0">Kon video\'s niet laden.<br>' +
+        'Controleer de Google Sheet of <code>data/videos.json</code>.</p>';
+      return;
+    }
   }
 
   // Enrich each video with a derived videoId
-  allVideos = data.videos
+  allVideos = videos
     .map(v => ({ ...v, videoId: extractVideoId(v.youtubeUrl) }))
     .filter(v => v.videoId)                           // skip entries without a valid URL
     .sort((a, b) => parseDate(b.date) - parseDate(a.date)); // newest first
