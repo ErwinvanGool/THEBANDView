@@ -25,6 +25,13 @@ const NEWEST_COUNT  = 6;   // number of videos shown in the "Newest" row
 const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQw_z5XuGMTmRkr6B0G4m7PwSW5BfatlcWtZfKvJ1BQoKZ8UNB2FAq1sqgMAgjBPRUInOxagPw5PIbu/pub?output=csv';
 const FALLBACK_URL   = 'data/videos.json';
 
+// YouTube Data API v3 key — needed to fetch publish dates automatically.
+// Get one at https://console.cloud.google.com/ (enable "YouTube Data API v3").
+const YOUTUBE_API_KEY = '';
+
+const DATE_CACHE_KEY = 'theband_yt_dates';
+const DATE_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // refresh cached dates after 7 days
+
 /* ── App state ────────────────────────────────────────── */
 let allVideos      = [];  // every video from JSON (sorted newest first)
 let filteredVideos = [];  // videos currently shown (active category filter)
@@ -115,13 +122,68 @@ async function loadVideos() {
   }
 
   // Enrich each video with a derived videoId
-  allVideos = videos
+  let enriched = videos
     .map(v => ({ ...v, videoId: extractVideoId(v.youtubeUrl) }))
-    .filter(v => v.videoId)                           // skip entries without a valid URL
-    .sort((a, b) => parseDate(b.date) - parseDate(a.date)); // newest first
+    .filter(v => v.videoId); // skip entries without a valid URL
+
+  // Fetch publish dates from YouTube; falls back to empty string when no API key
+  enriched = await fetchYouTubeDates(enriched);
+
+  allVideos = enriched.sort((a, b) => parseDate(b.date) - parseDate(a.date)); // newest first
 
   buildCategoryNav();
   applyFilter('all');
+}
+
+
+/* ============================================================
+   YouTube date fetching
+   ============================================================ */
+
+/**
+ * Fetch the publish date for each video from the YouTube Data API v3.
+ * Results are cached in localStorage for DATE_CACHE_TTL milliseconds to
+ * minimise API quota usage.  When YOUTUBE_API_KEY is empty the videos are
+ * returned unchanged (date field stays empty and they sort to the bottom).
+ */
+async function fetchYouTubeDates(videos) {
+  if (!YOUTUBE_API_KEY) return videos;
+
+  // Load existing cache
+  let cache = {};
+  try {
+    const raw = localStorage.getItem(DATE_CACHE_KEY);
+    if (raw) {
+      const { ts, data } = JSON.parse(raw);
+      if (Date.now() - ts < DATE_CACHE_TTL) cache = data;
+    }
+  } catch { /* ignore parse errors */ }
+
+  // Collect IDs not yet in cache
+  const missing = videos.map(v => v.videoId).filter(id => !cache[id]);
+
+  // YouTube API accepts up to 50 IDs per request
+  for (let i = 0; i < missing.length; i += 50) {
+    const batch = missing.slice(i, i + 50).join(',');
+    try {
+      const url = `https://www.googleapis.com/youtube/v3/videos?id=${encodeURIComponent(batch)}&part=snippet&key=${encodeURIComponent(YOUTUBE_API_KEY)}`;
+      const res = await fetch(url);
+      if (!res.ok) { console.warn('YouTube API error', res.status); continue; }
+      const json = await res.json();
+      json.items.forEach(item => {
+        cache[item.id] = item.snippet.publishedAt; // ISO-8601 string
+      });
+    } catch (err) {
+      console.warn('Kon YouTube-datum niet ophalen:', err);
+    }
+  }
+
+  // Persist updated cache
+  try {
+    localStorage.setItem(DATE_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: cache }));
+  } catch { /* storage quota exceeded — continue without caching */ }
+
+  return videos.map(v => ({ ...v, date: cache[v.videoId] || '' }));
 }
 
 

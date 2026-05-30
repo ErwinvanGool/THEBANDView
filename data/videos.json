@@ -1,5 +1,5 @@
 {
-  "_comment": "Add your videos here. Each video needs: title, youtubeUrl, category, date (YYYY-MM-DD).",
+  "_comment": "Add your videos here. Each video needs: title, youtubeUrl, category. The publish date is fetched automatically from YouTube.",
   "_categories": [
     "THE GAME",
     "Taptoes",
@@ -7,49 +7,42 @@
     "Streetparades",
     "Concerten"
   ],
-  "_howToAdd": "Copy an existing block, paste it at the top of the list, and update the fields. The newest video at the top shows first in the app.",
+  "_howToAdd": "Copy an existing block, paste it at the top of the list, and update the fields. Videos are sorted by their YouTube publish date automatically.",
   "videos": [
     {
       "title": "EXEMPEL | THEBAND | THEGAME | Taptoe Huizen 2026",
       "youtubeUrl": "https://www.youtube.com/watch?v=261MIbcfoUA",
-      "category": "THE GAME",
-      "date": ""
+      "category": "THE GAME"
     },
     {
       "title": "GUILTY PLEASURE - Bodycam",
       "youtubeUrl": "https://www.youtube.com/watch?v=evV1F_ded9w",
-      "category": "Taptoes",
-      "date": "2025-11-18"
+      "category": "Taptoes"
     },
     {
       "title": "Exempel THEBAND. - Guilty Pleasure - Denmark Aabenraa",
       "youtubeUrl": "https://www.youtube.com/watch?v=GRsx49Pw8Ng",
-      "category": "Taptoes",
-      "date": "2025-07-06"
+      "category": "Taptoes"
     },
     {
       "title": "Optredens video 1",
       "youtubeUrl": "https://www.youtube.com/watch?v=2cGoQtUp1uw",
-      "category": "Optredens",
-      "date": ""
+      "category": "Optredens"
     },
     {
       "title": "Exempel the band taptoe Den Bosch 2024 met euphoria mars en f1 theme",
       "youtubeUrl": "https://www.youtube.com/watch?v=-dSW-AAGFFQ",
-      "category": "Streetparades",
-      "date": "2024-10-15"
+      "category": "Streetparades"
     },
     {
       "title": "Drumfanfare Exempel - Moment for Morricone",
       "youtubeUrl": "https://www.youtube.com/watch?v=G_jRgncTZh8",
-      "category": "Concerten",
-      "date": ""
+      "category": "Concerten"
     },
     {
       "title": "Belle Perez Medley",
       "youtubeUrl": "https://www.youtube.com/watch?v=dQ__aIfXMFY",
-      "category": "Concerten",
-      "date": "2025-03-15"
+      "category": "Concerten"
     }
   ]
 }
