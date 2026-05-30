@@ -9,7 +9,7 @@
    2. YouTube video IDs are extracted from each youtubeUrl.
    3. Thumbnails are automatically generated using the video ID.
    4. Category chips are built from the unique categories in the data.
-   5. "Newest" section shows the NEWEST_COUNT most-recent videos.
+   5. "Voor jouw uitgekozen" section shows NEWEST_COUNT random videos (within active category).
    6. Main grid shows all videos (or filtered by category).
    7. Tapping a card opens the modal and starts YouTube playback.
    8. The YouTube IFrame API is used so we can detect when a video
@@ -21,7 +21,7 @@
 'use strict';
 
 /* ── Configuration ────────────────────────────────────── */
-const NEWEST_COUNT  = 6;   // number of videos shown in the "Newest" row
+const NEWEST_COUNT  = 6;   // number of videos shown in the "Voor jouw uitgekozen" row
 const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQw_z5XuGMTmRkr6B0G4m7PwSW5BfatlcWtZfKvJ1BQoKZ8UNB2FAq1sqgMAgjBPRUInOxagPw5PIbu/pub?output=csv';
 const FALLBACK_URL   = 'data/videos.json';
 
@@ -320,21 +320,27 @@ function createVideoCard(video, indexInFiltered) {
   return card;
 }
 
-/** Render the "Newest" section (top NEWEST_COUNT videos from filtered list). */
+/** Render the "Voor jouw uitgekozen" section (NEWEST_COUNT random videos from filtered list). */
 function renderNewest() {
   const grid    = document.getElementById('newest-grid');
   const section = document.getElementById('newest-section');
   grid.innerHTML = '';
 
-  const newest = filteredVideos.slice(0, NEWEST_COUNT);
+  // Pick random videos from the filtered list (Fisher-Yates shuffle, then take first N)
+  const pool = [...filteredVideos];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const picked = pool.slice(0, NEWEST_COUNT);
 
-  if (newest.length === 0) {
+  if (picked.length === 0) {
     section.classList.add('hidden');
     return;
   }
 
   section.classList.remove('hidden');
-  newest.forEach(video => {
+  picked.forEach(video => {
     const idx = filteredVideos.indexOf(video);
     grid.appendChild(createVideoCard(video, idx));
   });
