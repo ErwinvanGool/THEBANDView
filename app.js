@@ -496,6 +496,7 @@ function renderModalSuggestions() {
           src="${thumbUrl}"
           alt="${escapeHtml(v.title)}"
           loading="lazy"
+          onload="if(this.naturalWidth===120){this.src='${fallback}'}"
           onerror="if(this.src!=='${fallback}'){this.src='${fallback}'}"
         />
       </div>
