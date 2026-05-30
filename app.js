@@ -450,6 +450,64 @@ function updateModalMeta() {
   const hasMultiple = filteredVideos.length > 1;
   document.getElementById('prev-btn').disabled = !hasMultiple;
   document.getElementById('next-btn').disabled = !hasMultiple;
+
+  renderModalSuggestions();
+}
+
+/** Render 4 random video suggestions in the modal strip, excluding the current video. */
+function renderModalSuggestions() {
+  const container = document.getElementById('modal-suggestions');
+  container.innerHTML = '';
+
+  const pool = filteredVideos
+    .map((v, i) => ({ v, i }))
+    .filter(({ i }) => i !== currentIndex);
+
+  if (pool.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = '';
+
+  // Fisher-Yates shuffle, then take first 4
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+
+  pool.slice(0, 4).forEach(({ v, i }) => {
+    const thumbUrl = getThumbnailUrl(v.videoId);
+    const fallback = getThumbnailFallback(v.videoId);
+
+    const card = document.createElement('div');
+    card.className = 'suggestion-card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `Speel ${v.title}`);
+    card.innerHTML = `
+      <div class="suggestion-thumb-wrap">
+        <img
+          class="suggestion-thumb"
+          src="${thumbUrl}"
+          alt="${escapeHtml(v.title)}"
+          loading="lazy"
+          onerror="if(this.src!=='${fallback}'){this.src='${fallback}'}"
+        />
+      </div>
+      <div class="suggestion-info">
+        <p class="suggestion-title">${escapeHtml(v.title)}</p>
+      </div>
+    `;
+
+    card.addEventListener('click', () => openVideo(i));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openVideo(i);
+      }
+    });
+
+    container.appendChild(card);
+  });
 }
 
 
