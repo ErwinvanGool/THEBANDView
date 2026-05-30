@@ -25,9 +25,9 @@ const NEWEST_COUNT  = 6;   // number of videos shown in the "Newest" row
 const SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQw_z5XuGMTmRkr6B0G4m7PwSW5BfatlcWtZfKvJ1BQoKZ8UNB2FAq1sqgMAgjBPRUInOxagPw5PIbu/pub?output=csv';
 const FALLBACK_URL   = 'data/videos.json';
 
-// YouTube Data API v3 key — needed to fetch publish dates automatically.
-// Get one at https://console.cloud.google.com/ (enable "YouTube Data API v3").
-const YOUTUBE_API_KEY = '';
+// YouTube Data API v3 key — injected at deploy time via GitHub Actions.
+// Do NOT put the real key here. Store it as a GitHub Secret named YOUTUBE_API_KEY.
+const YOUTUBE_API_KEY = '__YOUTUBE_API_KEY__';
 
 const DATE_CACHE_KEY = 'theband_yt_dates';
 const DATE_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // refresh cached dates after 7 days
