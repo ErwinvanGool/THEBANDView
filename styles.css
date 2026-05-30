@@ -64,7 +64,8 @@ button {
   position: sticky;
   top: 0;
   z-index: 100;
-  height: var(--header-h);
+  height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
   background: rgba(10, 10, 10, 0.96);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
@@ -74,7 +75,7 @@ button {
 .header-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  height: 100%;
+  height: var(--header-h);
   padding: 0 var(--gap);
   display: flex;
   align-items: center;
