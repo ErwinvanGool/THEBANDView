@@ -631,15 +631,16 @@ button {
     font-size: 0.9rem;
   }
 
-  /* Suggestions: scroll horizontally on mobile, show ~2.5 cards */
+  /* Suggestions: horizontaal scrollbaar, 4 kleine vaste kaarten */
   .modal-suggestions {
-    grid-template-columns: unset;
     display: flex;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 10px;
-    padding-bottom: 2px;
+    gap: 8px;
+    padding-bottom: 4px;
+    /* voorkom dat flex-items uitrekken */
+    align-items: flex-start;
   }
 
   .modal-suggestions::-webkit-scrollbar {
@@ -647,8 +648,14 @@ button {
   }
 
   .suggestion-card {
-    min-width: 140px;
+    width: 130px;
+    min-width: 130px;
     flex-shrink: 0;
+  }
+
+  .suggestion-title {
+    font-size: 0.72rem;
+    -webkit-line-clamp: 2;
   }
 
   /* ── Phone-specific additions ─────────────────────────── */
