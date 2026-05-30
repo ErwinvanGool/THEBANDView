@@ -339,8 +339,12 @@ function renderNewest() {
     return;
   }
 
+  // On mobile (< 700px) only show 1 card to prevent huge thumbnails
+  const isMobile = window.matchMedia('(max-width: 699px)').matches;
+  const visible  = isMobile ? picked.slice(0, 1) : picked;
+
   section.classList.remove('hidden');
-  picked.forEach(video => {
+  visible.forEach(video => {
     const idx = filteredVideos.indexOf(video);
     grid.appendChild(createVideoCard(video, idx));
   });

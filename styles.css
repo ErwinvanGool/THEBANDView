@@ -599,14 +599,15 @@ button {
 
   /* Newest section: toon 1 compacte kaart op mobiel */
   #newest-grid {
-    grid-template-columns: 260px;
-    grid-template-rows: auto;
-    grid-auto-rows: 0;
+    display: flex !important;
+    flex-wrap: nowrap;
     overflow: hidden;
   }
 
-  #newest-grid .video-card:not(:first-child) {
-    display: none;
+  #newest-grid .video-card {
+    width: 200px !important;
+    max-width: 200px !important;
+    flex-shrink: 0;
   }
 
   .modal-panel {
