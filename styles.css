@@ -164,7 +164,7 @@ button {
 /* ── Category navigation ────────────────────────────────── */
 #category-nav {
   position: sticky;
-  top: var(--header-h);
+  top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
   z-index: 90;
   display: flex;
   align-items: center;
@@ -658,5 +658,68 @@ button {
   .suggestion-card {
     min-width: 140px;
     flex-shrink: 0;
+  }
+
+  /* ── Phone-specific additions ─────────────────────────── */
+
+  /* Bottom safe area (iPhone home indicator) */
+  #videos-section {
+    padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 0px) + 40px));
+  }
+
+  /* Smaller category chips so more fit without scrolling */
+  .category-chip {
+    padding: 0 16px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+
+  /* Tighter card info row */
+  .video-info {
+    padding: 8px 10px 12px;
+  }
+
+  /* Allow modal to scroll if content overflows on very short screens */
+  .modal-panel {
+    max-height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* bottom safe area inside the modal */
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Slightly smaller brand name to prevent wrapping on narrow phones */
+  .brand-name {
+    font-size: 1.2rem;
+  }
+}
+
+/* ── Very small phones (< 380 px) ────────────────────────── */
+@media (max-width: 379px) {
+  :root {
+    --gap: 10px;
+  }
+
+  /* Narrower newest-row cards so they don't overflow the viewport */
+  #newest-grid .video-card {
+    min-width: 160px;
+  }
+
+  /* Single-word brand name fits without gap */
+  .brand-name {
+    font-size: 1.05rem;
+    gap: 4px;
+  }
+
+  /* Slightly smaller nav chips */
+  .category-chip {
+    padding: 0 12px;
+    height: 36px;
+    font-size: 0.82rem;
+  }
+
+  /* Tighter video title on tiny cards */
+  .video-title {
+    font-size: 0.82rem;
   }
 }
